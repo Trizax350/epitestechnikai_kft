@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Adatok mentése</h1>
+<div mat-dialog-content>
+    <form [formGroup]="userForm">
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Név</mat-label>
+            <input matInput formControlName="Name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>E-mail</mat-label>
+            <input matInput formControlName="Email">
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Jelszó</mat-label>
+            <input matInput formControlName="Password" type="password">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Státusz</mat-label>
+            <mat-select formControlName="Status">
+                <mat-option *ngFor="let StatusValues of StatusValues" [value]="StatusValues.value">{{StatusValues.viewValue}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions [align]="'end'">
+    <button mat-raised-button color="warn" mat-dialog-close>Mégse</button>
+    <button mat-raised-button color="primary" (click)="addUserItem()">{{actionBtn}}</button>
+</div>

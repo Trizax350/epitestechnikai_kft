@@ -1,0 +1,64 @@
+<h1 mat-dialog-title>Adatok mentése</h1>
+<div mat-dialog-content>
+    <form [formGroup]="deliveryForm">
+        <mat-form-field appearance="fill">
+            <mat-label>Vevő neve</mat-label>
+            <mat-select formControlName="Customer_ID">
+                <mat-option *ngFor="let Customer of CustomerList" [value]="Customer.ID">{{Customer.Name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Kiadás ideje</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="Release_date" (dateChange)="changeDatePickerAll()">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Tartály típusa</mat-label>
+            <mat-select formControlName="Container_type">
+                <mat-option *ngFor="let Container of ContainerList" [value]="Container.ID">
+                    {{Container.Type}} | 
+                    {{Container.Capacity}} | 
+                    {{Container.Part1}} | 
+                    {{Container.Part2}} | 
+                    {{Container.Part3}} | 
+                    {{Container.Part4}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Tömítés</mat-label>
+            <mat-select formControlName="Seal">
+                <mat-option *ngFor="let SealTypeValues of SealTypeValues" [value]="SealTypeValues.value">{{SealTypeValues.viewValue}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Gyártási szám</mat-label>
+            <input matInput formControlName="Serial_number">
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Bizonylat szám</mat-label>
+            <input matInput formControlName="Document_number">
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Gyártási idő</mat-label>
+            <input matInput [matDatepicker]="picker2" formControlName="Production_date" (dateChange)="changeDatePickerValid()">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Évényes</mat-label>
+            <input matInput [matDatepicker]="picker3" formControlName="Valid" (dateChange)="changeDatePickerAll()">
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Megjegyzés</mat-label>
+            <input matInput formControlName="Comment">
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions [align]="'end'">
+    <button mat-raised-button color="warn" mat-dialog-close>Mégse</button>
+    <button mat-raised-button color="primary" (click)="addDeliveryItem()">{{actionBtn}}</button>
+</div>

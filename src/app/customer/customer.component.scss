@@ -1,0 +1,43 @@
+p {
+    margin: 20px;
+    font-size: 150%;
+    color: black;
+  }
+  
+  table {
+    width: 100%;
+    border: 1px solid black;
+  }
+  
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  th {
+    font-size: 110%;
+    background-color: #555b61;
+    color: white;
+  }
+  
+  td[name="data_td"]:hover {
+    background-color: lightgreen;
+  }
+  
+  td[name="button_td"] {
+    text-align: center;
+  }
+  
+  td {
+    font-size: 110%;
+  }
+  
+  button:hover {
+    color: black;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  

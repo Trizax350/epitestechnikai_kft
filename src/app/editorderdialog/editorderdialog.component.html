@@ -1,0 +1,44 @@
+<h1 mat-dialog-title>Adatok mentése</h1>
+<div mat-dialog-content>
+    <form [formGroup]="orderForm">
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Tartály típus</mat-label>
+            <mat-select formControlName="Containers_ID">
+                <mat-option *ngFor="let Container of ContainerList" [value]="Container.ID">
+                    {{Container.Type}} | 
+                    {{Container.Capacity}} | 
+                    {{Container.Part1}} | 
+                    {{Container.Part2}} | 
+                    {{Container.Part3}} | 
+                    {{Container.Part4}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Rendelés adatok (ID | Rendelési idő | Szállítási idő)</mat-label>
+            <mat-select formControlName="Freight_ID">
+                <mat-option *ngFor="let Freight of FreightList" [value]="Freight.ID">
+                    {{Freight.ID}} | 
+                    {{Freight.Order_date}} | 
+                    {{Freight.Transport_date}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Rendelt mennyiség</mat-label>
+            <input matInput formControlName="Ordered_quantity" type="number" min="1">
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Bevételezett mennyiség</mat-label>
+            <input matInput formControlName="Revenue_quantity" type="number" min="0">
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Érték</mat-label>
+            <input matInput formControlName="Monetary_value" type="number" min="0.1" step="0.1">
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions [align]="'end'">
+    <button mat-raised-button color="warn" mat-dialog-close>Mégse</button>
+    <button mat-raised-button color="primary" (click)="addOrderItem()">{{actionBtn}}</button>
+</div>

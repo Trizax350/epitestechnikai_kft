@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>Adatok mentése</h1>
+<div mat-dialog-content>
+    <form [formGroup]="containerForm">
+        <mat-form-field appearance="fill">
+            <mat-label>Tartály típusa</mat-label>
+            <mat-select formControlName="Type">
+                <mat-option *ngFor="let ContainerTypeValues of ContainerTypeValues" [value]="ContainerTypeValues.value">{{ContainerTypeValues.viewValue}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Térfogat</mat-label>
+            <input matInput formControlName="Capacity" type="number" min="0">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Raklap</mat-label>
+            <mat-select formControlName="Part1">
+                <mat-option *ngFor="let Part1TypeValues of Part1TypeValues" [value]="Part1TypeValues.value">{{Part1TypeValues.viewValue}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Fedél típusa</mat-label>
+            <mat-select formControlName="Part2">
+                <mat-option *ngFor="let Part2TypeValues of Part2TypeValues" [value]="Part2TypeValues.value"> {{Part2TypeValues.viewValue}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Fedél mérete</mat-label>
+            <mat-select formControlName="Part3">
+                <mat-option *ngFor="let Part3TypeValues of Part3TypeValues" [value]="Part3TypeValues.value">{{Part3TypeValues.viewValue}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Szelep</mat-label>
+            <mat-select formControlName="Part4">
+                <mat-option *ngFor="let Part4TypeValues of Part4TypeValues" [value]="Part4TypeValues.value">{{Part4TypeValues.viewValue}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Jelenlegi készlet</mat-label>
+            <input matInput formControlName="Stock" type="number" min="0">
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Érték (HUF)</mat-label>
+            <input matInput formControlName="Monetary_value" type="number" min="0.1" step="0.1">
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions [align]="'end'">
+    <button mat-raised-button color="warn" mat-dialog-close>Mégse</button>
+    <button mat-raised-button color="primary" (click)="addInventoryItem()">{{actionBtn}}</button>
+</div>

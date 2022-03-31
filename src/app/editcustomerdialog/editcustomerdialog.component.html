@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Adatok mentése</h1>
+<div mat-dialog-content>
+    <form [formGroup]="customerForm">
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Név</mat-label>
+            <input matInput formControlName="Name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Cím</mat-label>
+            <input matInput formControlName="Address">
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions [align]="'end'">
+    <button mat-raised-button color="warn" mat-dialog-close>Mégse</button>
+    <button mat-raised-button color="primary" (click)="addCustomerItem()">{{actionBtn}}</button>
+</div>

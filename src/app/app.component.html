@@ -1,0 +1,64 @@
+<mat-toolbar class="mat-elevation-z8">
+  <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+      <mat-icon *ngIf="!sidenav.opened">
+          menu
+      </mat-icon>
+      <mat-icon *ngIf="sidenav.opened">
+          close
+      </mat-icon>
+  </button>
+  
+  <img width="40" alt="Építéstechnika_logo" src="assets/img/epitestechnika_logo.png"/>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
+      <button mat-button class="menu-button" routerLink="/dashboard">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </button>
+      <button mat-button class="menu-button" routerLink="/livemap">
+        <mat-icon>map</mat-icon>
+        <span>Livemap</span>
+      </button> 
+      <button mat-button class="menu-button" routerLink="/analitycs">
+          <mat-icon>analytics</mat-icon>
+          <span>Analitika</span>
+      </button>
+      <br><br>
+      <button mat-button class="menu-button" routerLink="/user_list_all">
+          <mat-icon>person</mat-icon>
+          <span>Felhasználók</span>
+      </button>
+
+      <mat-divider></mat-divider>
+
+      <button mat-button class="menu-button" routerLink="/customer_list_all">
+        <mat-icon>work</mat-icon>
+        <span>Ügyfelek</span>
+      </button>
+      <button mat-button class="menu-button" routerLink="/delivery_list_all">
+        <mat-icon>flight_takeoff</mat-icon>
+        <span>Kiszállítás</span>
+      </button>
+      <button mat-button class="menu-button" routerLink="/order_list_all">
+        <mat-icon>add_shopping_cart</mat-icon>
+        <span>Rendelés</span>
+      </button>
+      <button mat-button class="menu-button" routerLink="/stock_list_all">
+        <mat-icon>timeline</mat-icon>
+        <span>Készlet</span>
+      </button>
+      <button mat-button class="menu-button" routerLink="/inventory_list_all">
+        <mat-icon>assignment</mat-icon>
+        <span>Leltár</span>
+      </button>
+
+      <mat-divider></mat-divider>
+      <button mat-button class="menu-button" routerLink="/todolist">
+        <mat-icon> list_alt</mat-icon>
+        <span>Fejlesztési lista</span>
+      </button>
+  </mat-sidenav>
+  <router-outlet></router-outlet>
+</mat-sidenav-container>
