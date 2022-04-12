@@ -15,6 +15,8 @@ app=FastAPI()
 
 origins = [
     'http://localhost:4200',
+    'http://0.0.0.0:4200',
+    'http://10.77.1.23:4200',
     'http://containers.eu.ngrok.io',
     'https://containers.eu.ngrok.io'
 ]
