@@ -19,6 +19,14 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Cím </th>
         <td name="data_td" mat-cell *matCellDef="let row"> {{row.Address}} </td>
       </ng-container>
+      <ng-container matColumnDef="Tax_number">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Adószám </th>
+        <td name="data_td" mat-cell *matCellDef="let row"> {{row.Tax_number}} </td>
+      </ng-container>
+      <ng-container matColumnDef="Contact_data">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Kontakt név, e-mail </th>
+        <td name="data_td" mat-cell *matCellDef="let row"> {{row.Contact_name}} <br> {{row.Contact_email}} </td>
+      </ng-container>
       <ng-container matColumnDef="Edit">
         <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Szerkesztés </th>
         <td name="button_td" mat-cell *matCellDef="let row"> 

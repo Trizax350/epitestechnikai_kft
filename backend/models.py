@@ -51,6 +51,9 @@ class Customer(Base):
     ID = Column(Integer, primary_key=True, autoincrement=True)
     Name = Column(String(255), nullable=False)
     Address = Column(String(255), nullable=False)
+    Tax_number = Column(String(255), nullable=True)
+    Contact_name = Column(String(255), nullable=True)
+    Contact_email = Column(String(255), nullable=True)
 
 class Freight(Base):
     __tablename__='freight'

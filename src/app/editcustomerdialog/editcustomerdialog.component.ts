@@ -23,13 +23,19 @@ export class EditCustomerDialogComponent implements OnInit {
   ngOnInit(): void {
    this.customerForm = this.formBuilder.group({
       Name: ['',Validators.required],
-      Address: ['',Validators.required]
+      Address: ['',Validators.required],
+      Tax_number: [''],
+      Contact_name: [''],
+      Contact_email: ['']
    })
 
    if(this.editData){
       this.actionBtn = "Frissítés";
       this.customerForm.controls['Name'].setValue(this.editData.Name);
       this.customerForm.controls['Address'].setValue(this.editData.Address);
+      this.customerForm.controls['Tax_number'].setValue(this.editData.Tax_number);
+      this.customerForm.controls['Contact_name'].setValue(this.editData.Contact_name);
+      this.customerForm.controls['Contact_email'].setValue(this.editData.Contact_email);
    }
   }
 

@@ -85,6 +85,9 @@ class Customer(BaseModel):
     ID: Optional[int]
     Name: str
     Address: str
+    Tax_number: Optional[str]
+    Contact_name: Optional[str]
+    Contact_email: Optional[str]
 
     class Config:
         orm_mode=True
@@ -498,7 +501,10 @@ def add_item_to_customer(customer: Customer):
     new_customer = models.Customer(
         ID = customer.ID,
         Name = customer.Name,
-        Address = customer.Address
+        Address = customer.Address,
+        Tax_number = customer.Tax_number,
+        Contact_name = customer.Contact_name,
+        Contact_email = customer.Contact_email
     )
 
     db.add(new_customer)
@@ -508,7 +514,9 @@ def add_item_to_customer(customer: Customer):
 
 @app.put('/customer_update_by_id/{item_id}', response_model=Customer, status_code=status.HTTP_200_OK)
 def update_customer_item_by_id(item_id: int, customer: Customer):
-    check_customer_name = db.query(models.Customer).filter(models.Customer.Name == customer.Name).first()
+    check_customer_name = db.query(models.Customer).filter(and_(
+        models.Customer.ID != item_id,
+        models.Customer.Name == customer.Name)).first()
 
     if check_customer_name is not None:
        raise HTTPException(status_code=400, detail="Hiba: Ez a vevő már létezik.")
@@ -516,6 +524,9 @@ def update_customer_item_by_id(item_id: int, customer: Customer):
     item_to_update = db.query(models.Customer).filter(models.Customer.ID == item_id).first()
     item_to_update.Name = customer.Name
     item_to_update.Address = customer.Address
+    item_to_update.Tax_number = customer.Tax_number
+    item_to_update.Contact_name = customer.Contact_name
+    item_to_update.Contact_email = customer.Contact_email
 
     db.commit()
     return item_to_update
