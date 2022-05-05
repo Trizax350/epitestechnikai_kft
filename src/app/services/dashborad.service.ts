@@ -24,13 +24,18 @@ export class DashboardService {
     return this.http.get<any>(url);
   }
 
-  getNextDelivery(): Observable<any> {
-    let url = this.baseUrl + '/next_delivery_datas';
+  getTotalVal(): Observable<Array<any>> {
+    let url = this.baseUrl + '/dashboard_all_delivery_val';
     return this.http.get<any>(url);
   }
 
-  getNextOrder(): Observable<any> {
-    let url = this.baseUrl + '/next_order_datas';
+  getTotalCount(): Observable<Array<any>> {
+    let url = this.baseUrl + '/dashboard_all_delivery_count';
+    return this.http.get<any>(url);
+  }
+
+  getAllDelivery(): Observable<Array<any>> {
+    let url = this.baseUrl + '/dashboard_list_all_delivery';
     return this.http.get<any>(url);
   }
 

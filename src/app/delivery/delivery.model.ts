@@ -1,12 +1,12 @@
 export interface delivery{
     ID: number;
     Customer_ID: number;
-    Release_date: Date;
+    Order_date: Date;
     Container_type: number;
-    Seal: string;
-    Serial_number: number;
-    Document_number: number;
-    Production_date: Date;
-    Valid: Date;
+    Count: number;
+    Supplier: string;
+    Selling_sprice: number;
+    Freight_cost: number;
     Comment: string;
+    Delivery_date: Date;
 }

@@ -19,9 +19,13 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Vevő címe </th>
       <td name="data_td" mat-cell *matCellDef="let row"> {{row.Customer.Address}} </td>
     </ng-container>
-    <ng-container matColumnDef="Release_date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Kiadás ideje </th>
-      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Release_date | date: 'yyyy/MM/dd'}} </td>
+    <ng-container matColumnDef="Order_date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Rendelés ideje </th>
+      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Order_date | date: 'yyyy/MM/dd'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="Delivery_date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Szállítás ideje </th>
+      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Delivery_date | date: 'yyyy/MM/dd'}} </td>
     </ng-container>
     <ng-container matColumnDef="Container_type">
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Tartály típusa</th>
@@ -29,25 +33,21 @@
         {{row.Container.Type}} {{row.Container.Capacity}} | {{row.Container.Part1}} | {{row.Container.Part2}} | {{row.Container.Part3}} | {{row.Container.Part4}}
       </td>
     </ng-container>
-    <ng-container matColumnDef="Seal">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Tömítés </th>
-      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Seal}} </td>
+    <ng-container matColumnDef="Count">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Darabszám </th>
+      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Count}} </td>
     </ng-container>
-    <ng-container matColumnDef="Serial_number">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Gy. száma </th>
-      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Serial_number}} </td>
+    <ng-container matColumnDef="Supplier">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Szállító </th>
+      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Supplier}} </td>
     </ng-container>
-    <ng-container matColumnDef="Document_number">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Bizonylat sz. </th>
-      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Document_number}} </td>
+    <ng-container matColumnDef="Selling_price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Eladási ár </th>
+      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Selling_price | currency:'€':true:'0.2-4'}} </td>
     </ng-container>
-    <ng-container matColumnDef="Production_date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Gyárt. idő </th>
-      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Production_date | date: 'yyyy/MM/dd'}} </td>
-    </ng-container>
-    <ng-container matColumnDef="Valid">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Érvényes </th>
-      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Valid | date: 'yyyy/MM/dd'}} </td>
+    <ng-container matColumnDef="Freight_cost">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Fuvarköltség </th>
+      <td name="data_td" mat-cell *matCellDef="let row"> {{row.Delivery.Freight_cost | currency:'HUF':true:'0.0-4'}} </td>
     </ng-container>
     <ng-container matColumnDef="Comment">
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Megjegyzés </th>

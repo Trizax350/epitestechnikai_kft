@@ -52,13 +52,6 @@ export class EditDeliveryDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<EditDeliveryDialogComponent>
   ) { }
 
-  SealTypeValues: SealTypeValues[] = [
-    {value: 'EPDM', viewValue: 'EPDM'},
-    {value: 'PCP', viewValue: 'PCP'},
-    {value: 'VITON', viewValue: 'VITON'},
-    {value: 'N/A', viewValue: 'N/A'},
-  ];
-
   ngOnInit(): void {
     this.CustomerService.getCustomer().subscribe((data: any) => {
       this.CustomerList = data;
@@ -70,40 +63,33 @@ export class EditDeliveryDialogComponent implements OnInit {
 
     this.deliveryForm = this.formBuilder.group({
         Customer_ID: ['',Validators.required],
-        Release_date: ['',Validators.required], 
+        Order_date: ['',Validators.required], 
+        Delivery_date: ['',Validators.required], 
         Container_type: ['',Validators.required], 
-        Seal: ['',Validators.required], 
-        Serial_number: ['',Validators.required], 
-        Document_number: ['',Validators.required], 
-        Production_date: ['',Validators.required], 
-        Valid: ['',Validators.required], 
+        Count: ['',Validators.required], 
+        Supplier: ['',Validators.required], 
+        Selling_price: ['',Validators.required], 
+        Freight_cost: ['',Validators.required], 
         Comment: ['']
     })
 
     if(this.editData){
         this.actionBtn = "Frissítés";
         this.deliveryForm.controls['Customer_ID'].setValue(this.editData.Customer.ID);
-        this.deliveryForm.controls['Release_date'].setValue(this.editData.Delivery.Release_date);
+        this.deliveryForm.controls['Order_date'].setValue(this.editData.Delivery.Order_date);
+        this.deliveryForm.controls['Delivery_date'].setValue(this.editData.Delivery.Delivery_date);
         this.deliveryForm.controls['Container_type'].setValue(this.editData.Delivery.Container_type);
-        this.deliveryForm.controls['Seal'].setValue(this.editData.Delivery.Seal);
-        this.deliveryForm.controls['Serial_number'].setValue(this.editData.Delivery.Serial_number);
-        this.deliveryForm.controls['Document_number'].setValue(this.editData.Delivery.Document_number);
-        this.deliveryForm.controls['Production_date'].setValue(this.editData.Delivery.Production_date);
-        this.deliveryForm.controls['Valid'].setValue(this.editData.Delivery.Valid);
+        this.deliveryForm.controls['Count'].setValue(this.editData.Delivery.Count);
+        this.deliveryForm.controls['Supplier'].setValue(this.editData.Delivery.Supplier);
+        this.deliveryForm.controls['Selling_price'].setValue(this.editData.Delivery.Selling_price);
+        this.deliveryForm.controls['Freight_cost'].setValue(this.editData.Delivery.Freight_cost);
         this.deliveryForm.controls['Comment'].setValue(this.editData.Delivery.Comment);
     }
   }
 
   changeDatePickerAll(): any {
-    this.deliveryForm.value.Release_date = moment(this.deliveryForm.value.Release_date).format('YYYY-MM-DD');
-    this.deliveryForm.value.Production_date = moment(this.deliveryForm.value.Production_date).format('YYYY-MM-DD');
-    this.deliveryForm.value.Valid = moment(this.deliveryForm.value.Valid).format('YYYY-MM-DD');
-  }
-
-  changeDatePickerValid(): any {
-    const prod = this.deliveryForm.value.Production_date;
-    this.valid = new Date(prod.getFullYear() + 2,prod.getMonth() + 6,prod.getDate());
-    this.deliveryForm.controls['Valid'].setValue(this.valid);
+    this.deliveryForm.value.Order_date = moment(this.deliveryForm.value.Order_date).format('YYYY-MM-DD');
+    this.deliveryForm.value.Delivery_date = moment(this.deliveryForm.value.Delivery_date).format('YYYY-MM-DD');
   }
 
   addDeliveryItem(){

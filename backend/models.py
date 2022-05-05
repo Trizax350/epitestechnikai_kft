@@ -19,14 +19,14 @@ class Delivery(Base):
     __tablename__='delivery'
     ID = Column(Integer, primary_key=True, autoincrement=True)
     Customer_ID = Column(Integer, ForeignKey('customers.ID'))
-    Release_date = Column(Date, nullable=False)
+    Order_date = Column(Date, nullable=False)
     Container_type = Column(Integer, ForeignKey('containers.ID'))
-    Seal = Column(String(255), nullable=False)
-    Serial_number = Column(Integer, nullable=False)
-    Document_number = Column(Integer, nullable=False)
-    Production_date = Column(Date, nullable=False)
-    Valid = Column(Date, nullable=False)
+    Count = Column(Integer, nullable=False)
+    Supplier = Column(String(255), nullable=False)
+    Selling_price = Column(Float, nullable=False)
+    Freight_cost = Column(Float, nullable=False)
     Comment = Column(String(255), nullable=False)
+    Delivery_date = Column(Date, nullable=False)
 
 class Order(Base):
     __tablename__='orders'

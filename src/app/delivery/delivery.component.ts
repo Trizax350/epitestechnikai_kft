@@ -15,7 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 
 export class DeliveryComponent implements OnInit {
-  displayedColumns: string[] = ['ID', 'Customer', 'Address', 'Release_date', 'Container_type', 'Seal', 'Serial_number', 'Document_number', 'Production_date', 'Valid', 'Comment', 'Edit', 'Delete'];
+  displayedColumns: string[] = ['ID', 'Customer', 'Address', 'Order_date', 'Delivery_date', 'Container_type', 'Count', 'Supplier', 'Selling_price', 'Freight_cost', 'Comment', 'Edit', 'Delete'];
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -72,14 +72,14 @@ export class DeliveryComponent implements OnInit {
             case 'ID': return data['Delivery']['ID'];
             case 'Customer': return data['Customer']['Name'];
             case 'Address': return data['Customer']['Address'];
-            case 'Release_date': return data['Delivery']['Release_date'];
+            case 'Order_date': return data['Delivery']['Order_date'];
             case 'Container_type': return data['Delivery']['Container_type'];
-            case 'Seal': return data['Delivery']['Seal'];
-            case 'Serial_number': return data['Delivery']['Serial_number'];
-            case 'Document_number': return data['Delivery']['Document_number'];
-            case 'Production_date': return data['Delivery']['Production_date'];
-            case 'Valid': return data['Delivery']['Valid'];
+            case 'Count': return data['Delivery']['Count'];
+            case 'Supplier': return data['Delivery']['Supplier'];
+            case 'Selling_price': return data['Delivery']['Selling_price'];
+            case 'Freight_cost': return data['Delivery']['Freight_cost'];
             case 'Comment': return data['Delivery']['Comment'];
+            case 'Delivery_date': return data['Delivery']['Delivery_date'];
             default: return data[property];
           }
         };

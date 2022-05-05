@@ -5,7 +5,7 @@ from fastapi import FastAPI, status, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List
 from database import SessionLocal
-from sqlalchemy.sql import func, literal
+from sqlalchemy.sql import func, extract, literal
 from sqlalchemy import desc
 import models
 import hashlib, os
@@ -47,14 +47,14 @@ class Container(BaseModel):
 class Delivery(BaseModel):
     ID: Optional[int]
     Customer_ID: int
-    Release_date: date
+    Order_date: date
     Container_type: int
-    Seal: str
-    Serial_number: int
-    Document_number: int
-    Production_date: date
-    Valid: date
+    Count: int
+    Supplier: str
+    Selling_price: float
+    Freight_cost: float
     Comment: Optional[str]
+    Delivery_date: date
 
     class Config:
         orm_mode=True
@@ -113,38 +113,53 @@ def list_containers_ord_rev_all():
 
 @app.get('/dashboard_list_ord_rev_stat', status_code=200)
 def list_containers_ord_rev_stat():
-    container_ord_rev_stat = db.query(
-        models.Order.Containers_ID, models.Order.Monetary_value, models.Container,
-        func.sum(models.Order.Ordered_quantity).label('Ord'),
-        func.sum(models.Order.Revenue_quantity).label('Rev')).join(models.Container).group_by(models.Order.Containers_ID, models.Order.Monetary_value, models.Container).order_by(models.Container.ID).all()
+    container_ord_rev_stat = db.query(models.Order, models.Container, models.Freight).join(models.Container).join(models.Freight).group_by(models.Freight.ID, models.Order.ID, models.Container.ID).order_by(models.Freight.Transport_date).filter(models.Order.Status != 'Zárt').all()
     return container_ord_rev_stat
 
-@app.get('/next_delivery_datas', status_code=200)
-def list_next_delivery_datas():
+@app.get('/dashboard_list_all_delivery', status_code=200)
+def list_containers_ord_rev_stat():
     current_date = datetime.today().strftime('%Y-%m-%d')
-    next_delivery_datas = db.query(models.Delivery, models.Container, models.Customer).join(models.Container).join(models.Customer).order_by(models.Delivery.Release_date).filter(models.Delivery.Release_date > current_date).first()
-    return next_delivery_datas
-
-@app.get('/next_order_datas', status_code=200)
-def list_next_order_datas():
-    current_date = datetime.today().strftime('%Y-%m-%d')
-    next_order_datas = db.query(models.Order, models.Freight, models.Container).join(models.Freight).join(models.Container).order_by(models.Freight.Transport_date).filter(and_(models.Freight.Transport_date > current_date, models.Order.Status != 'Zárt')).first()
-    return next_order_datas
+    list_all_delivery = db.query(models.Delivery, models.Container, models.Customer).join(models.Container).join(models.Customer).group_by(models.Customer.ID, models.Delivery.ID, models.Container.ID).order_by(models.Delivery.Delivery_date).filter(models.Delivery.Delivery_date > current_date).all()
+    return list_all_delivery
 
 @app.get('/dashboard_customer_list', status_code=200)
-def list_customer_by_delivery_count():
-    customer_list = db.query(models.Delivery.Customer_ID, models.Customer, func.count(models.Delivery.Customer_ID).label('Count')).join(models.Customer).group_by(models.Delivery.Customer_ID, models.Customer).order_by(desc('Count')).all()
+def list_customer_by_monetary_value():
+    current_year = datetime.now()
+    sub_customer_list = db.query(
+        models.Delivery.Customer_ID, 
+        models.Customer,
+        func.sum(models.Delivery.Count * models.Delivery.Selling_price).filter(extract('year', models.Delivery.Delivery_date) == current_year.year).label('Sum_val')).group_by(models.Delivery.Customer_ID, models.Customer.ID).join(models.Customer).order_by(desc('Sum_val')).subquery()
+    
+    customer_list = db.query(sub_customer_list).filter(sub_customer_list.c.Sum_val != None).all()
     return customer_list
+
+@app.get('/dashboard_all_delivery_val', status_code=200)
+def list_all_delivery_val():
+    current_year = datetime.now()
+    sum_by_id = db.query(func.sum(models.Delivery.Count * models.Delivery.Selling_price).label('Sum_all')).group_by(models.Delivery.ID).filter(extract('year', models.Delivery.Delivery_date) == current_year.year).subquery()
+
+    total_value = db.query(func.sum(sum_by_id.c.Sum_all)).scalar()
+    return total_value
+
+@app.get('/dashboard_all_delivery_count', status_code=200)
+def list_all_delivery_count():
+    current_year = datetime.now()
+    total_count = db.query(func.sum(models.Delivery.Count).label('Sum_all_count')).filter(extract('year', models.Delivery.Delivery_date) == current_year.year).scalar()
+    return total_count
 
 ##Stock functions
 
 @app.get('/stock_list_all', status_code=200)
 def list_stock():
+    current_date = datetime.today().strftime('%Y-%m-%d')
+    #.filter(models.Delivery.Delivery_date <= current_date)
+    #.filter(models.Freight.Transport_date <= current_date) nem is a current date-től kell nézni...
+
     delivery = db.query(
         models.Container,
         models.Delivery.Container_type,
         models.Order.Containers_ID,
-        func.count(models.Delivery.Container_type).label('Container_count'),
+        func.sum(models.Delivery.Count).label('Container_count'),
         func.sum(models.Order.Revenue_quantity).label('Rev_all')).select_from(models.Container).outerjoin(models.Delivery).outerjoin(models.Order).group_by(models.Container.ID, models.Delivery.Container_type, models.Order.Containers_ID).order_by(models.Container.ID).all()
     return delivery
 
@@ -263,17 +278,20 @@ def add_item_to_delivery(delivery: Delivery):
     if db_delivery is not None:
        raise HTTPException(status_code=400, detail="Hiba: Kiszállítás azonosító már létezik.")
 
+    if(delivery.Order_date > delivery.Delivery_date):
+        raise HTTPException(status_code=400, detail="Hiba: A rendelés ideje nem lehet későbbi, mint a szállítás ideje.")
+
     new_delivery = models.Delivery(
         ID = delivery.ID,
         Customer_ID = delivery.Customer_ID,
-        Release_date = delivery.Release_date,
+        Order_date = delivery.Order_date,
         Container_type = delivery.Container_type,
-        Seal = delivery.Seal,
-        Serial_number = delivery.Serial_number,
-        Document_number = delivery.Document_number,
-        Production_date = delivery.Production_date,
-        Valid = delivery.Valid,
-        Comment = delivery.Comment
+        Count = delivery.Count,
+        Supplier = delivery.Supplier,
+        Selling_price = delivery.Selling_price,
+        Freight_cost = delivery.Freight_cost,
+        Comment = delivery.Comment,
+        Delivery_date = delivery.Delivery_date
     )
 
     db.add(new_delivery)
@@ -283,16 +301,19 @@ def add_item_to_delivery(delivery: Delivery):
 
 @app.put('/delivery_update_by_id/{item_id}', response_model=Delivery, status_code=status.HTTP_200_OK)
 def update_delivery_item_by_id(item_id: int, delivery: Delivery):
+    if(delivery.Order_date > delivery.Delivery_date):
+        raise HTTPException(status_code=400, detail="Hiba: A rendelés ideje nem lehet későbbi, mint a szállítás ideje.")
+
     item_to_update = db.query(models.Delivery).filter(models.Delivery.ID == item_id).first()
     item_to_update.Customer_ID = delivery.Customer_ID
-    item_to_update.Release_date = delivery.Release_date
+    item_to_update.Order_date = delivery.Order_date
     item_to_update.Container_type = delivery.Container_type
-    item_to_update.Seal = delivery.Seal
-    item_to_update.Serial_number = delivery.Serial_number
-    item_to_update.Document_number = delivery.Document_number
-    item_to_update.Production_date = delivery.Production_date
-    item_to_update.Valid = delivery.Valid
+    item_to_update.Count = delivery.Count
+    item_to_update.Supplier = delivery.Supplier
+    item_to_update.Selling_price = delivery.Selling_price
+    item_to_update.Freight_cost = delivery.Freight_cost
     item_to_update.Comment = delivery.Comment
+    item_to_update.Delivery_date = delivery.Delivery_date
 
     db.commit()
     return item_to_update
@@ -567,7 +588,7 @@ def add_item_to_freight(freight: Freight):
        raise HTTPException(status_code=400, detail="Hiba: Ez a rendelés azonosító már létezik.")
 
     if(freight.Order_date > freight.Transport_date):
-        raise HTTPException(status_code=400, detail="Hiba: Hibás szállítási idő.")
+        raise HTTPException(status_code=400, detail="Hiba: A rendelési idő nem lehet később, mint a szállítási idő.")
 
     new_freight = models.Freight(
         ID = freight.ID,
@@ -583,7 +604,7 @@ def add_item_to_freight(freight: Freight):
 @app.put('/freight_update_by_id/{item_id}', response_model=Freight, status_code=status.HTTP_200_OK)
 def update_freight_item_by_id(item_id: int, freight: Freight):
     if(freight.Order_date > freight.Transport_date):
-        raise HTTPException(status_code=400, detail="Hiba: Hibás szállítási idő.")
+        raise HTTPException(status_code=400, detail="Hiba: A rendelési idő nem lehet később, mint a szállítási idő.")
 
     item_to_update = db.query(models.Freight).filter(models.Freight.ID == item_id).first()
     item_to_update.Order_date = freight.Order_date

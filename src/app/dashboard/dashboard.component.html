@@ -3,76 +3,75 @@
     <table style="margin-top: 10px;">
         <tr>
             <td style="border: 1px solid black; width: 33%;">
-                <p *ngFor="let containers2 of containers2;">Tartály rendelések ({{containers2.Ord_all}}db / {{containers2.Rev_all}}db)</p>
-                <ul *ngFor="let containers1 of containers1;">
-                    <li>Tartály azonosító: {{containers1.Containers_ID}}
-                    </li><hr>
+                <p *ngFor="let containers2 of containers2;"> Megrendelt tartályok összesen: {{containers2.Ord_all}}db</p>
+                <p *ngFor="let containers2 of containers2;">Ebből megérkezett: {{containers2.Rev_all}}db</p>
+                <p>Nyitott / részleges státuszú rendelések:</p>
+                <ul *ngFor="let c of containers1; let i=index">
+                    <li *ngIf ="(i==0)">
+                        Szállítási idő: {{containers1[i+1]?.Freight.Transport_date | date: 'yyyy/MM/dd'}}<hr>
+                    </li>
                     <ul>
-                        <li>Tartály típusa: {{containers1.Container.Type}} | 
-                            {{containers1.Container.Capacity}} | 
-                            {{containers1.Container.Part1}} | 
-                            {{containers1.Container.Part2}} | 
-                            {{containers1.Container.Part3}} | 
-                            {{containers1.Container.Part4}}
+                        <li>Tartály típusa: {{c.Container.Type}} | 
+                            {{c.Container.Capacity}} | 
+                            {{c.Container.Part1}} | 
+                            {{c.Container.Part2}} | 
+                            {{c.Container.Part3}} | 
+                            {{c.Container.Part4}}
                         </li>
                     </ul>
                     <ul>
                         <ul>
-                            <li>Rendelt / Bevételezett mennyiség: {{containers1.Ord}}db / {{containers1.Rev}}db</li>
+                            <li>Rendelt / Bevételezett mennyiség: {{c.Order.Ordered_quantity}}db / {{c.Order.Revenue_quantity}}db</li>
                         </ul>
                     </ul>
                     <ul>
                         <ul>
-                            <li>Rendelt mennyiség értéke összesen: {{containers1.Monetary_value * containers1.Ord | currency:'€':true:'0.0-4'}}</li>
+                            <li>Rendelt mennyiség értéke összesen: {{c.Container.Monetary_value * c.Order.Ordered_quantity | currency:'€':true:'0.0-4'}}</li>
                         </ul>
                     </ul>
+                    <li style="margin-top: 10px" *ngIf ="(containers1[i+1]?.Freight.Transport_date != undefined && c.Freight.Transport_date != containers1[i+1]?.Freight.Transport_date)">
+                        Szállítási idő: {{containers1[i+1]?.Freight.Transport_date | date: 'yyyy/MM/dd'}}<hr>
+                    </li>
                 </ul>
             </td>
-            <td style="border: 1px solid black; width: 34%;">
-                <div>
-                    <p>Következő kiszállítás adatai</p>
+            <td style="border: 1px solid black; width: 34%; vertical-align: top;">
+                <p>Következő kiszálítások:</p>
+                <ul *ngFor="let c of alldelivery; let i=index">
+                    <li *ngIf ="(i==0)">
+                        Szállítási idő: {{c.Delivery.Delivery_date | date: 'yyyy/MM/dd'}}<hr>
+                    </li>
                     <ul>
-                        <li>Kiadás ideje: {{delivery1.Delivery.Release_date | date: 'yyyy/MM/dd'}}</li><hr>
+                        <li>Vevő: {{c.Customer.Name}}</li>
                         <ul>
-                            <li>Vevő neve: {{delivery1.Customer.Name}}</li>
-                            <li>Vevő címe: {{delivery1.Customer.Address}}</li>
-                            <li>Tartály típusa: {{delivery1.Container.Type}} | 
-                                {{delivery1.Container.Capacity}} | 
-                                {{delivery1.Container.Part1}} | 
-                                {{delivery1.Container.Part2}} | 
-                                {{delivery1.Container.Part3}} | 
-                                {{delivery1.Container.Part4}}</li>
-                            <li>Gyártási idő: {{delivery1.Delivery.Production_date | date: 'yyyy/MM/dd'}}</li>
-                            <li>Megjegyzés: {{delivery1.Delivery.Comment}}</li>
+                            <li>Kontakt név: {{c.Customer.Contact_name}}</li>
+                            <li>Kontakt e-mail: {{c.Customer.Contact_email}}</li>
+                        </ul>
+                        <li>Tartály típusa: {{c.Container.Type}} | 
+                            {{c.Container.Capacity}} | 
+                            {{c.Container.Part1}} | 
+                            {{c.Container.Part2}} | 
+                            {{c.Container.Part3}} | 
+                            {{c.Container.Part4}}
+                        </li>
+                        <ul>
+                            <li>Darabszám: {{c.Delivery.Count}}</li>
+                            <li>Szállító: {{c.Delivery.Supplier}}</li>
+                            <li>Ár összesen: {{c.Delivery.Selling_price * c.Delivery.Count | currency:'€':true:'0.0-4'}}</li>
                         </ul>
                     </ul>
-                </div>
-                <div style="border-top: 1px solid black;">
-                    <p>Következő rendelés adatai</p>
-                    <ul>
-                        <li>Szállítási idő: {{order1.Freight.Transport_date | date: 'yyyy/MM/dd'}}</li><hr>
-                        <ul>
-                            <li>Tartály típusa: {{order1.Container.Type}} | 
-                                {{order1.Container.Capacity}} | 
-                                {{order1.Container.Part1}} | 
-                                {{order1.Container.Part2}} | 
-                                {{order1.Container.Part3}} | 
-                                {{order1.Container.Part4}}</li>
-                            <li>Rendelési idő: {{order1.Freight.Order_date | date: 'yyyy/MM/dd'}}</li>
-                            <li>Rendelt mennyiség: {{order1.Order.Ordered_quantity}}db</li>
-                            <li>Bevételezett mennyiség: {{order1.Order.Revenue_quantity}}db</li>
-                            <li>Státusz: {{order1.Order.Status}}</li>
-                        </ul>
-                    </ul>
-                    <p style="font-size: 100%;">(Csak a nyitott vagy részleges státusszal rendelkező rendelés jelenik meg.)</p>
-                </div>
+                    <li style="margin-top: 10px" *ngIf ="(alldelivery[i+1]?.Delivery.Delivery_date != undefined && c.Delivery.Delivery_date != alldelivery[i+1]?.Delivery.Delivery_date)">
+                        Szállítási idő: {{alldelivery[i+1]?.Delivery.Delivery_date | date: 'yyyy/MM/dd'}}<hr>
+                    </li>
+                </ul>
             </td>
-            <td style="border: 1px solid black; width: 33%;">
-                <p>Ügyfelek listája kiszállítások száma szerint</p>
-                <ul *ngFor="let customer1 of customer1;">
-                    <li>{{customer1.Customer.Name}} | {{customer1.Customer.Address}}</li>
-                    <ul>
-                        <li>Kiszállítások száma: {{customer1.Count}}db</li>
+            <td style="border: 1px solid black; width: 33%; vertical-align: top;">
+                <p>Tárgyévben kiszállított tartályok száma: {{totalcount}}db</p>
+                <p>Árbevétel: {{totalval | currency:'€':true:'0.0-4'}}</p>
+                <p>TOP 5 ügyfél:</p>
+                <ul *ngFor="let customer1 of customer1; let i=index">
+                    <li *ngIf ="(i < 5)">{{customer1?.Name}} | {{customer1?.Address}}</li>
+                    <ul *ngIf ="(i < 5)">
+                        <li>Vásárlások össz értéke: {{customer1?.Sum_val | currency:'€':true:'0.0-4'}}</li>
                     </ul>
                 </ul>
             </td>

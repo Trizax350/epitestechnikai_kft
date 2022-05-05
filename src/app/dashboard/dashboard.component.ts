@@ -11,16 +11,20 @@ export class DashboardComponent implements OnInit {
   containers1: Array<any> = [];
   containers2: Array<any> = [];
   customer1: Array<any> = [];
+  alldelivery : Array<any> = [];
   delivery1: any;
   order1: any;
+  totalval: any;
+  totalcount: any;
   constructor(private http: HttpClient, private DashboardService: DashboardService) { }
 
   ngOnInit(): void {
     this.getOrdAndRevSumByContainers();
     this.getOrdAndRevSumAllContainers();
-    this.getNextDelivery();
-    this.getNextOrder();
+    this.getAllDelivery();
     this.getCustomersByCount();
+    this.getTotalVal();
+    this.getTotalCount();
   }
 
   getOrdAndRevSumByContainers(){
@@ -35,22 +39,27 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  getNextDelivery(){
-    this.DashboardService.getNextDelivery().subscribe(data => {
-      this.delivery1 = data;
+  getTotalVal(){
+    this.DashboardService.getTotalVal().subscribe(data => {
+      this.totalval = data;
     })
   }
 
-  getNextOrder(){
-    this.DashboardService.getNextOrder().subscribe(data => {
-      this.order1 = data;
+  getTotalCount(){
+    this.DashboardService.getTotalCount().subscribe(data => {
+      this.totalcount = data;
+    })
+  }
+
+  getAllDelivery(){
+    this.DashboardService.getAllDelivery().subscribe(data => {
+      this.alldelivery = data;
     })
   }
 
   getCustomersByCount(){
     this.DashboardService.getCustomersByCount().subscribe(data => {
       this.customer1 = data;
-      console.log(this.customer1);
     })
   }
 }
