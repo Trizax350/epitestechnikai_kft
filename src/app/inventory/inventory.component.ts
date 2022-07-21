@@ -7,6 +7,7 @@ import { EditInventoryDialogComponent } from '../editinventorydialog/editinvento
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { CheckPriceLogDialogComponent } from '../checkpricelogdialog/checkpricelogdialog.component';
 
 @Component({
   selector: 'app-inventory',
@@ -15,7 +16,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 
 export class InventoryComponent implements OnInit {
-  displayedColumns: string[] = ['ID', 'Type', 'Capacity', 'Part1', 'Part2', 'Part3', 'Part4', 'Stock', 'Monetary_value', 'Counted_value', 'Last_updated', 'Edit', 'Delete'];
+  displayedColumns: string[] = ['ID', 'Type', 'Capacity', 'Part1', 'Part2', 'Part3', 'Part4', 'Stock', 'Monetary_value', 'Counted_value', 'Last_updated', 'Pricelog', 'Edit', 'Delete'];
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -55,6 +56,15 @@ export class InventoryComponent implements OnInit {
       if(val==='update'){
         this.getInventory();
       }
+    })
+  }
+
+  checkPriceLog(row: any){
+    this.dialog.open(CheckPriceLogDialogComponent, {
+      width: '50%',
+      data:row
+    }).afterClosed().subscribe(val=>{
+      this.getInventory();
     })
   }
 

@@ -40,6 +40,11 @@ export class InventoryService {
     return this.http.get<any>(url);
   }
 
+  getPriceLogByContainerID(id: number): Observable<Array<any>> {
+    let url = this.baseUrl + '/get_price_log_by_id/'+id;
+    return this.http.get<any>(url);
+  }
+
   deleteInventoryItem(id: number){
     let url = this.baseUrl + '/inventory_delete_by_id/'+id;
     return this.http.delete<any>(url);

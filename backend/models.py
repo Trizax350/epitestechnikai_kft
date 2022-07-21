@@ -60,3 +60,10 @@ class Freight(Base):
     ID = Column(Integer, primary_key=True, autoincrement=True)
     Order_date = Column(Date, nullable=False)
     Transport_date = Column(Date, nullable=False)
+
+class Container_value(Base):
+    __tablename__='container_value'
+    ID = Column(Integer, primary_key=True, autoincrement=True)
+    Container_ID = Column(Integer, ForeignKey('containers.ID'))
+    Price = Column(Float, nullable=False)
+    Date_of_price = Column(DateTime, server_default=func.now(), onupdate=func.now())

@@ -16,7 +16,7 @@ app=FastAPI()
 origins = [
     'http://localhost:4200',
     'http://0.0.0.0:4200',
-    'http://10.77.1.23:4200',
+    'http://10.77.1.19:4200',
     'http://containers.eu.ngrok.io',
     'https://containers.eu.ngrok.io'
 ]
@@ -100,6 +100,15 @@ class Freight(BaseModel):
     class Config:
         orm_mode=True
 
+class Container_value(BaseModel):
+    ID: Optional[int]
+    Container_ID: int
+    Price: float
+    Date_of_price: datetime
+
+    class Config:
+        orm_mode=True
+
 db = SessionLocal()
 
 ##Dashboard functions
@@ -162,6 +171,13 @@ def list_stock():
         func.sum(models.Delivery.Count).label('Container_count'),
         func.sum(models.Order.Revenue_quantity).label('Rev_all')).select_from(models.Container).outerjoin(models.Delivery).outerjoin(models.Order).group_by(models.Container.ID, models.Delivery.Container_type, models.Order.Containers_ID).order_by(models.Container.ID).all()
     return delivery
+
+##Container price log functions
+
+@app.get('/get_price_log_by_id/{item_id}', response_model=List[Container_value], status_code=status.HTTP_200_OK)
+def get_price_log_by_id(item_id: int):
+    container_price_log = db.query(models.Container_value).filter(models.Container_value.Container_ID == item_id).all()
+    return container_price_log
 
 ##Inventory functions
 

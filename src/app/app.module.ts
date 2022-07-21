@@ -4,6 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgxChartsModule }from '@swimlane/ngx-charts';
+import * as PlotlyJS from 'plotly.js-dist-min';
+import { PlotlyModule } from 'angular-plotly.js';
+
+PlotlyModule.plotlyjs = PlotlyJS;
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -45,6 +50,7 @@ import { DelFreightDialogComponent } from './delfreightdialog/delfreightdialog.c
 import { TodolistComponent } from './todolist/todolist.component';
 import { StockComponent } from './stock/stock.component';
 import { CustomerComponent } from './customer/customer.component';
+import { CheckPriceLogDialogComponent } from './checkpricelogdialog/checkpricelogdialog.component';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
@@ -63,6 +69,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
     CustomerComponent,
     SaveFreightDialogComponent,
     DelFreightDialogComponent,
+    CheckPriceLogDialogComponent,
   ],
   entryComponents: [
     EditInventoryDialogComponent,
@@ -75,6 +82,8 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    NgxChartsModule,
+    PlotlyModule,
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,

@@ -51,6 +51,12 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Utolsó frissítés </th>
       <td name="data_td" mat-cell *matCellDef="let row"> {{row.Last_updated | date: 'yyyy/MM/dd H:m:s'}} </td>
     </ng-container>
+    <ng-container matColumnDef="Pricelog">
+      <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Árak </th>
+      <td name="button_td" mat-cell *matCellDef="let row"> 
+        <button mat-raised-button (click)="checkPriceLog(row)" color="primary"><mat-icon> insert_chart</mat-icon></button>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="Edit">
       <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Szerkesztés </th>
       <td name="button_td" mat-cell *matCellDef="let row"> 
