@@ -1,14 +1,15 @@
 import { InjectionToken, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgxChartsModule }from '@swimlane/ngx-charts';
-import * as PlotlyJS from 'plotly.js-dist-min';
-import { PlotlyModule } from 'angular-plotly.js';
 
-PlotlyModule.plotlyjs = PlotlyJS;
+//import * as PlotlyJS from 'plotly.js-dist-min';
+//import { PlotlyModule } from 'angular-plotly.js';
+
+//PlotlyModule.plotlyjs = PlotlyJS;
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -82,8 +83,8 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    NgxChartsModule,
-    PlotlyModule,
+    CommonModule,
+    //PlotlyModule,
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
