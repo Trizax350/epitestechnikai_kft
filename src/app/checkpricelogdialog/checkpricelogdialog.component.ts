@@ -3,14 +3,13 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { InventoryService } from '../services/inventory.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { formatDate } from '@angular/common';
+import * as Highcharts from 'highcharts';
 
 @Component({
   selector: 'app-editinventorydialog',
-  templateUrl: './checkpricelogdialog.component.html',
-  styleUrls: ['./checkpricelogdialog.component.scss']
+  templateUrl: './checkpricelogdialog.component.html'
 })
 export class CheckPriceLogDialogComponent implements OnInit {
-  actionBtn: string = "Mentés";
   data: any;
   prices: any=[];
   timestamps: any=[];
@@ -21,14 +20,44 @@ export class CheckPriceLogDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<CheckPriceLogDialogComponent>
   ) { }
 
-  public graph = {
-      data: [{ x: this.timestamps, y: this.prices, type: 'line' }],
-      layout: {autosize: true, title: 'Tartály árak'},
-  };
-
   ngOnInit(): void {
     this.getContainerPriceLogByID();
   }
+
+  Highcharts: typeof Highcharts = Highcharts;
+  chartOptions: Highcharts.Options = {
+    title: {
+      text: "Tartály árváltozások"
+    },
+    xAxis: {
+      title: {
+        text: "Időpontok"
+      }
+    },
+    yAxis: {
+      title: {
+        text: "Árak (€)"
+      }
+    },
+    series: [
+      {
+        name: "Tartály ára",
+        type: "spline",
+        data: [{
+          //A chart szerint üresek a tömbök...
+          x: this.timestamps.length,
+          y: this.prices.length,
+        }],
+        dataLabels: {
+          enabled: true,
+          overflow: 'justify'
+        }
+      },
+    ],
+    credits: {
+      enabled: false,
+    }
+  };
 
   getContainerPriceLogByID(){
     this.InventoryService.getPriceLogByContainerID(this.editData.ID).subscribe({
@@ -44,5 +73,5 @@ export class CheckPriceLogDialogComponent implements OnInit {
         alert(err.error.detail);
       }
     })
-  }
+  }  
 }

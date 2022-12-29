@@ -2,15 +2,8 @@ import { InjectionToken, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-//import * as PlotlyJS from 'plotly.js-dist-min';
-//import { PlotlyModule } from 'angular-plotly.js';
-
-//PlotlyModule.plotlyjs = PlotlyJS;
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -27,7 +20,6 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
-
 import { InventoryService } from './services/inventory.service';
 import { OrderService } from './services/order.service';
 import { DeliveryService } from './services/delivery.service';
@@ -35,11 +27,8 @@ import { UserService } from './services/user.service';
 import { CustomerService } from './services/customer.service';
 import { FreightService } from './services/freight.service';
 import { DashboardService } from './services/dashborad.service';
-
 import { environment } from 'src/environments/environment';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { EditInventoryDialogComponent } from './editinventorydialog/editinventorydialog.component';
 import { EditOrderDialogComponent, MY_FORMATS } from './editorderdialog/editorderdialog.component';
 import { EditUserDialogComponent } from './edituserdialog/edituserdialog.component';
@@ -52,6 +41,7 @@ import { TodolistComponent } from './todolist/todolist.component';
 import { StockComponent } from './stock/stock.component';
 import { CustomerComponent } from './customer/customer.component';
 import { CheckPriceLogDialogComponent } from './checkpricelogdialog/checkpricelogdialog.component';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
@@ -84,7 +74,6 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
     AppRoutingModule,
     BrowserAnimationsModule,
     CommonModule,
-    //PlotlyModule,
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
@@ -104,7 +93,8 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
     ConfirmationPopoverModule.forRoot({
       confirmButtonType: 'danger'
     }),
-    HttpClientModule
+    HttpClientModule,
+    HighchartsChartModule
   ],
   providers: [ 
     InventoryService,
